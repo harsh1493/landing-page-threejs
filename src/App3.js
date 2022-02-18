@@ -7,11 +7,11 @@ import { useHelper,OrbitControls ,PerspectiveCamera ,Plane} from "@react-three/d
 import { SpotLightHelper } from "three";
 const Light = () => {
   const ref = useRef()
- // useHelper(ref, SpotLightHelper, 1)
+//  useHelper(ref, SpotLightHelper, 1)
 
   return (
     <>
-      <ambientLight intensity={0.5} />
+      <ambientLight intensity={0.7} color={"#d3d3d3"}/>
       <spotLight
         //color={"#2416c3"}
         ref={ref}

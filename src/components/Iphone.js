@@ -1,11 +1,11 @@
 
 import * as THREE from 'three'
-import React, { useRef,useEffect,useState,Suspense } from 'react'
+import React, { useRef, useEffect, useState, Suspense } from 'react'
 import { useGLTF } from '@react-three/drei'
-import { useFrame,useLoader } from "@react-three/fiber";
-import { useSpring, animated,config } from '@react-spring/three'
+import { useFrame, useLoader } from "@react-three/fiber";
+import { useSpring, animated, config } from '@react-spring/three'
 import { TextureLoader } from "three/src/loaders/TextureLoader.js";
-import { MeshStandardMaterial } from 'three';
+import { CustomBlending, MeshStandardMaterial } from 'three';
 export const useMousePosition = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
@@ -21,7 +21,7 @@ export const useMousePosition = () => {
   return position;
 };
 export default function Model({ ...props }) {
- //  const position = useMousePosition();
+  //  const position = useMousePosition();
   const group = useRef()
   const { nodes, materials } = useGLTF('/iphone.gltf')
 
@@ -33,40 +33,40 @@ export default function Model({ ...props }) {
   const { position } = useSpring({
     // position: active ? [0, 0, 0] : [7, 0, 0],
     to: {
-     position:[0,0,0] 
-   },
-   from: { position: [5,5,-5]  },
-   config: { mass: 2, tension: 500, friction: 150 }
+      position: [0, 0, 0]
+    },
+    from: { position: [5, 5, -5] },
+    config: { mass: 2, tension: 500, friction: 150 }
     // config: config.wobbly
-   });
+  });
 
 
 
-  useFrame((state,delta)=>{
+  useFrame((state, delta) => {
     // const elapsedTime = clock.getElapsedTime()
     // group.current.position.y+=0.005*Math.sin(elapsedTime)
 
     const t = clock.getElapsedTime()
-   // group.current.rotation.set(0.1 + Math.cos(t / 4.5) / 5, Math.sin(t / 4) / 4, 0.3 - (1 + Math.sin(t / 4)) / 4)
+    // group.current.rotation.set(0.1 + Math.cos(t / 4.5) / 5, Math.sin(t / 4) / 4, 0.3 - (1 + Math.sin(t / 4)) / 4)
     group.current.position.y = (1 + Math.sin(t / 2)) / 5
-  //  group.current.rotation.y=0.005*(group.current.position.x-position.x)
+    //  group.current.rotation.y=0.005*(group.current.position.x-position.x)
   })
 
   return (
-    <animated.group ref={group} {...props} dispose={null} scale={[1.5,1.5,1.5]} castShadow  position={position}>
+    <animated.group ref={group} {...props} dispose={null} scale={[1.5, 1.5, 1.5]} castShadow position={position}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[-0.34, 0.19, -0.49]}>
           <group rotation={[Math.PI / 2, 0, 0]}>
             <group position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[1, 0.67, 1]}>
-              <mesh  geometry={nodes.mesh_0.geometry} material={nodes.mesh_0.material} />
+              <mesh geometry={nodes.mesh_0.geometry} material={nodes.mesh_0.material} />
             </group>
             <group rotation={[Math.PI / 2, 0, 0]}>
-              <mesh geometry={nodes.mesh_1.geometry} material={nodes.mesh_1.material}/>
+              <mesh geometry={nodes.mesh_1.geometry} material={nodes.mesh_1.material} />
               <mesh geometry={nodes.mesh_2.geometry} material={nodes.mesh_2.material} />
               <mesh geometry={nodes.mesh_3.geometry} material={nodes.mesh_3.material} />
               <mesh geometry={nodes.mesh_4.geometry} material={nodes.mesh_4.material} />
-              <mesh geometry={nodes.mesh_5.geometry} material={nodes.mesh_5.material}  />
-              <mesh geometry={nodes.mesh_6.geometry} material={nodes.mesh_6.material}/>
+              <mesh geometry={nodes.mesh_5.geometry} material={nodes.mesh_5.material} />
+              <mesh geometry={nodes.mesh_6.geometry} material={nodes.mesh_6.material} />
               <mesh geometry={nodes.mesh_7.geometry} material={nodes.mesh_7.material} />
               <mesh geometry={nodes.mesh_8.geometry} material={nodes.mesh_8.material} />
               <mesh geometry={nodes.mesh_9.geometry} material={materials.Bandas_magneticas} />
@@ -107,11 +107,17 @@ export default function Model({ ...props }) {
             <group position={[-0.22, -0.99, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[1.02, 1.1, 1.02]}>
               <mesh geometry={nodes.mesh_23.geometry} material={nodes.mesh_23.material} />
             </group>
-            <mesh  position={[0,0,0.05]}>
-                  <planeBufferGeometry  attach="geometry" args={[0.86, 1.8]} rotation={[-0.45,0,0]}/>
-                  {/* <meshBasicMaterial   attach="material" map={texture_1} />  */}
-                  <meshBasicMaterial   attach="material" map={texture_1}   transparent /> 
-             </mesh>
+            <mesh position={[0, 0, 0.05]}>
+              <planeBufferGeometry attach="geometry" args={[0.86, 1.8]} rotation={[-0.45, 0, 0]} />
+              {/* <meshBasicMaterial   attach="material" map={texture_1} />  */}
+              <meshPhongMaterial toneMapped={true}
+                attach="material" 
+                map={texture_1}
+                color="white"
+                transparent
+                opacity={1}       
+              />
+            </mesh>
           </group>
         </group>
       </group>
